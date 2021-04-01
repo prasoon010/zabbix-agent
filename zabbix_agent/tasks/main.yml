@@ -1,0 +1,40 @@
+---
+# tasks file for zabbix_agent/
+- name: "Downloading zabbix agent package"
+  shell: |
+    wget -P /tmp/ https://repo.zabbix.com/zabbix/4.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_4.0-3+$(lsb_release -cs)_all.deb
+    dpkg -i /tmp/zabbix-release_4.0-3+$(lsb_release -cs)_all.deb
+  register: zabbix_download
+
+- name: "update apt cache"
+  apt:
+    update_cache: yes
+
+- name: "Installing zabbix agent"
+  apt:
+    name:
+      - zabbix-agent
+    state: present
+
+- name: "Creating conf file"
+  template:
+    src: zabbix_agentd.j2
+    dest: "/etc/zabbix/zabbix_agentd.conf"
+    owner: "root"
+    group: "root"
+  register: zabbix_conf
+
+- name: "Creating zabbix scripts directory"
+  file: 
+    path: "/etc/zabbix/scripts"
+    state: directory
+    owner: zabbix
+    group: root
+
+
+- name: "Restarting zabbix_agent service"
+  when: zabbix_conf.changed == true
+  service:
+    name: zabbix-agent
+    state: restarted
+    enabled: true

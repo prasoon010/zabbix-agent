@@ -1,0 +1,4 @@
+---
+# vars file for zabbix_agent/
+timeout: 30
+zabbix_server_ip: 172.31.29.108

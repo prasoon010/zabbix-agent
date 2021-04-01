@@ -1,0 +1,9 @@
+---
+- name: "Installing zabbix agent in client machines"
+  hosts: "*"
+  become: true
+  become_method: sudo
+  
+  roles:
+    - zabbix_agent
+    
