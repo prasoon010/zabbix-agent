@@ -30,6 +30,21 @@
     state: directory
     owner: zabbix
     group: root
+    
+    
+- name: 'creating custom_up.conf'
+  copy:  
+    src: custom_up.conf
+    dest: "/etc/zabbix/scripts/custom_up.conf"
+    owner: zabbix
+    group: root
+
+- name: 'creating app-monit.sh'
+  copy:  
+    src: app-monit.sh
+    dest: "/etc/zabbix/scripts/app-monit.sh"
+    owner: zabbix
+    group: root
 
 
 - name: "Restarting zabbix_agent service"
